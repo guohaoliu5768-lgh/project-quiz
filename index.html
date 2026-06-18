@@ -808,9 +808,21 @@
       return arr;
     }
 
+    function randomizeOptionOrder(item) {
+      const shuffledOptions = shuffle(item.o.map((text, index) => ({
+        text,
+        isCorrect: index === item.a
+      })));
+      return {
+        ...item,
+        o: shuffledOptions.map(option => option.text),
+        a: shuffledOptions.findIndex(option => option.isCorrect)
+      };
+    }
+
     function makeSet() {
       const pool = bank.filter(item => item.d === state.level);
-      state.questions = shuffle(pool).slice(0, QUESTION_COUNT);
+      state.questions = shuffle(pool).slice(0, QUESTION_COUNT).map(randomizeOptionOrder);
       state.index = 0;
       state.selected = null;
       state.answered = false;
